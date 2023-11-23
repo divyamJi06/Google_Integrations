@@ -10,12 +10,12 @@ function sendMailOnNewResponsesViaMailDraft() {
   var newFormResponse = sheet.getRange(lastRow, 1, 1, sheet.getLastColumn()).getValues();
 
   var row = heads.reduce((o, k, i) => (o[k] = newFormResponse[0][i] || '', o), {});
-  console.log(row);
-  // return;
-  var emailAddress = row['Email Address'];
+
+  const subjectLine = "<YOUR-MAIL_TEMPLATE-SUBJECT>";  // CHANGE 1
+  var emailAddress = row['<YOUR-EMAIL-ADDRESS-HEADER-AS-IN-SHEET>']; // CHANGE 2
 
   const out = [];
-  const subjectLine = "QR Code";
+
   const emailTemplate = getGmailTemplateFromDrafts_(subjectLine);
   
   try {
@@ -32,10 +32,8 @@ function sendMailOnNewResponsesViaMailDraft() {
       attachments: emailTemplate.attachments,
       inlineImages: emailTemplate.inlineImages
     });
-    // Edits cell to record email sent date
     out.push([new Date()]);
   } catch (e) {
-    // modify cell to record error
     out.push([e.message]);
   }
   console.log(out);
